@@ -204,9 +204,10 @@ func (s *StateDB) cache() error {
 	// Get KVStores for modules wired to app
 	cms := s.cacheCtx.MultiStore().(storetypes.CacheMultiStore)
 	storeKeys := s.keeper.KVStoreKeys()
+	tStoreKeys := s.keeper.TransientStoreKeys()
 
 	// Create and set snapshot store to stateDB
-	snapshotStore := snapshotmulti.NewStore(cms, storeKeys)
+	snapshotStore := snapshotmulti.NewStore(cms, storeKeys, tStoreKeys)
 	s.snapshotter = snapshotStore
 	s.cacheCtx = s.cacheCtx.WithMultiStore(snapshotStore)
 	s.writeCache = func() {
